@@ -1,0 +1,142 @@
+//apply plugin: 'com.android.application'
+//apply plugin: 'com.google.protobuf'
+//
+//android {
+//    compileSdkVersion 27
+//
+//    defaultConfig {
+//        applicationId "io.grpc.helloworldexample"
+//        // API level 14+ is required for TLS since Google Play Services v10.2
+//        minSdkVersion 19
+//        targetSdkVersion 27
+//        versionCode 1
+//        versionName "1.0"
+//        multiDexEnabled true
+//    }
+//    buildTypes {
+//        debug { minifyEnabled false }
+//        release {
+//            minifyEnabled true
+//            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+//        }
+//    }
+//
+//    packagingOptions {
+//        pickFirst 'META-INF/INDEX.LIST'
+//        pickFirst 'META-INF/LICENSE'
+//        pickFirst 'META-INF/io.netty.versions.properties'
+//    }
+//
+//    lintOptions {
+//        disable 'GoogleAppIndexingWarning', 'HardcodedText', 'InvalidPackage'
+//        textReport true
+//        textOutput "stdout"
+//    }
+//}
+//
+//protobuf {
+//    protoc { artifact = 'com.google.protobuf:protoc:3.10.0' }
+//    plugins {
+//        javalite { artifact = "com.google.protobuf:protoc-gen-javalite:3.0.0" }
+//        grpc { artifact = 'io.grpc:protoc-gen-grpc-java:1.25.0' // CURRENT_GRPC_VERSION
+//        }
+//    }
+//    generateProtoTasks {
+//        all().each { task ->
+//            task.plugins {
+//                javalite {}
+//                grpc { // Options added to --grpc_out
+//                    option 'lite' }
+//            }
+//        }
+//    }
+//}
+//
+//dependencies {
+//    implementation 'com.android.support:appcompat-v7:27.0.2'
+//
+//    // You need to build grpc-java to obtain these libraries below.
+//    //implementation 'io.grpc:grpc-okhttp:1.25.0' // CURRENT_GRPC_VERSION
+//    implementation 'io.grpc:grpc-protobuf-lite:1.25.0' // CURRENT_GRPC_VERSION
+//    implementation 'io.grpc:grpc-stub:1.25.0' // CURRENT_GRPC_VERSION
+//    implementation 'javax.annotation:javax.annotation-api:1.2'
+//    implementation 'io.grpc:grpc-netty:1.25.0'
+//    implementation 'com.android.support:multidex:1.0.1'
+////    compile 'io.grpc:grpc-protobuf:1.1.2'
+////    compile 'io.grpc:grpc-stub:1.1.2'
+//}
+
+
+
+
+
+
+apply plugin: 'com.android.application'
+apply plugin: 'com.google.protobuf'
+
+android {
+    compileSdkVersion 24
+    buildToolsVersion "24.0.2"
+    defaultConfig {
+        applicationId "linjw.com.grpcdemo"
+        minSdkVersion 19
+        targetSdkVersion 24
+        versionCode 1
+        versionName "1.0"
+        multiDexEnabled true
+        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+    }
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+    }
+    configurations.all {
+        resolutionStrategy.force 'com.google.code.findbugs:jsr305:3.0.1'
+    }
+
+    packagingOptions {
+        pickFirst 'META-INF/INDEX.LIST'
+        pickFirst 'META-INF/LICENSE'
+        pickFirst 'META-INF/io.netty.versions.properties'
+    }
+
+}
+
+protobuf {
+    protoc {
+        artifact = 'com.google.protobuf:protoc:3.0.0'
+    }
+    plugins {
+        grpc {
+            artifact = 'io.grpc:protoc-gen-grpc-java:1.0.0' // CURRENT_GRPC_VERSION
+        }
+    }
+    generateProtoTasks {
+        all().each { task ->
+            task.builtins {
+                java {}
+            }
+            task.plugins {
+                grpc {}
+            }
+        }
+    }
+}
+
+dependencies {
+    compile fileTree(dir: 'libs', include: ['*.jar'])
+    androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {
+        exclude group: 'com.android.support', module: 'support-annotations'
+    })
+    compile 'com.android.support:appcompat-v7:24.2.1'
+    testCompile 'junit:junit:4.12'
+
+    compile 'io.grpc:grpc-netty:1.1.2'
+    compile 'io.grpc:grpc-protobuf:1.1.2'
+    compile 'io.grpc:grpc-stub:1.1.2'
+    compile 'javax.annotation:javax.annotation-api:1.2'
+    compile 'com.android.support:multidex:1.0.1'
+}
+
